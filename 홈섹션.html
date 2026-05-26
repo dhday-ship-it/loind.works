@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOIND Workstation - Home</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'DM Sans', sans-serif; }
+        .logo-font { font-family: 'Bebas Neue', sans-serif; }
+        
+        .glass-blur-heavy {
+            background: rgba(12, 16, 13, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.11);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.18);
+        }
+        .glass-input {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .spin-active { animation: spin 4s linear infinite; }
+        @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+        
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 99px; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-up { animation: fadeUp 0.18s ease-out forwards; }
+    </style>
+</head>
+<body class="m-0 p-0 text-white min-h-screen bg-slate-900 flex flex-col justify-between relative bg-cover bg-center bg-no-repeat bg-fixed"
+      style="background-image: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.45)), url('https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=2000&q=80');">
+
+    <nav class="sticky top-0 z-50 w-full h-14 bg-black/20 backdrop-blur-xl border-b border-white/10 flex items-center justify-between px-6 md:px-10">
+        <div class="flex items-center gap-6">
+            <div class="logo-font text-xl tracking-widest text-white cursor-pointer pr-5 border-r border-white/10 hover:opacity-60 transition-all">LOIND</div>
+            <div class="flex gap-2">
+                <button class="flex items-center gap-2 px-4 py-1.5 rounded-sm bg-white text-slate-900 text-xs font-semibold cursor-pointer">홈</button>
+                <button class="flex items-center gap-2 px-4 py-1.5 rounded-sm text-white/60 hover:text-white hover:bg-white/5 text-xs font-semibold cursor-pointer" onclick="alert('프로젝트 관리창 연동 대기')">프로젝트</button>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-5">
+            <div class="hidden sm:flex items-center gap-2 text-xs border-r border-white/10 pr-5">
+                <i class="fa-solid fa-cloud-sun text-amber-400 text-sm"></i>
+                <span class="font-bold text-white/90">Seoul</span>
+                <span class="text-white/60">16° / 23°</span>
+            </div>
+            <div class="relative flex items-center gap-2.5 px-4 cursor-pointer group" id="disc-wrap">
+                <div class="w-5 h-5 bg-white rounded-full flex items-center justify-center relative" id="disc"><div class="w-2 h-2 bg-slate-900 rounded-full"></div></div>
+                <span class="text-xs text-white/70 font-medium select-none w-8" id="disc-label">재생</span>
+                <div class="absolute top-[calc(100%+10px)] right-0 glass-blur-heavy rounded-xl p-3.5 flex items-center gap-3 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all shadow-2xl duration-200">
+                    <i class="fa-solid fa-volume-low text-sm text-white/60" id="vol-icon"></i>
+                    <div class="w-28 h-4 flex items-center relative cursor-pointer" id="vol-track">
+                        <div class="absolute left-0 right-0 h-1 bg-white/20 rounded-full"></div>
+                        <div class="absolute left-0 h-1 bg-white rounded-full" id="vol-fill" style="width:70%"></div>
+                        <div class="absolute w-3.5 h-3.5 bg-white border border-slate-900 rounded-full shadow-md" id="vol-thumb" style="left:70%; transform: translateX(-50%);"></div>
+                    </div>
+                    <span class="text-xs font-bold text-white/70 w-5 text-right font-mono" id="vol-val">70</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 border-l border-white/10 pl-5">
+                <div class="flex flex-col text-right leading-tight">
+                    <span class="text-xs font-bold text-white">이현린</span>
+                    <span class="text-[10px] text-white/50 font-mono">PM</span>
+                </div>
+                <div class="hidden md:flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-1 rounded-full text-xs font-medium text-white/80"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>워크스테이션 가동 중</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="w-full px-6 md:px-10 pt-10 pb-3">
+        <h2 class="logo-font text-4xl md:text-5xl font-light tracking-widest text-white/90 leading-none">LOIND CORPORATION</h2>
+        <div class="glass-panel max-w-lg rounded-xl p-2.5 mt-5 flex items-center gap-3">
+            <span class="text-xs font-bold text-white/40 uppercase tracking-wider px-3 font-mono border-r border-white/10">Quick Links</span>
+            <div class="flex items-center gap-2 pl-1">
+                <a href="#" class="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-white text-sm transition-all"><i class="fa-solid fa-globe"></i></a>
+                <a href="#" class="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-white text-sm transition-all"><i class="fa-solid fa-server"></i></a>
+                <a href="#" class="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-white text-sm transition-all"><i class="fa-regular fa-file-lines"></i></a>
+                <a href="#" class="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-white text-sm transition-all"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <main class="w-full px-6 md:px-10 py-5 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-16 md:mb-6">
+        
+        <div class="lg:col-span-8 glass-panel rounded-2xl p-7 shadow-2xl flex flex-col gap-6">
+            <div class="flex justify-between items-center border-b border-white/10 pb-4 font-mono">
+                <div class="flex items-center gap-2.5 text-xs font-bold tracking-widest text-emerald-400">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)] animate-pulse"></span>
+                    LOIND FLOW STATION v2.5
+                </div>
+                <div class="text-xs text-white/40 tracking-widest">MAY 25th, 2026</div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10 gap-y-8 md:gap-y-0 min-h-[460px]">
+                
+                <!-- 왼쪽 첫 번째 열: 완벽 연동형 스마트 스케줄러 캘린더 -->
+                <div class="flex flex-col justify-between pb-5 md:pb-0 md:pr-6">
+                    <div>
+                        <div class="flex justify-between items-center pb-2.5 mb-4">
+                            <div class="flex flex-col">
+                                <div class="text-2xl font-bold font-mono tracking-tight text-white" id="clock-home">00:00</div>
+                                <div class="text-[10px] font-mono tracking-widest text-white/40 uppercase mt-0.5" id="cal-month-title">MAY 2026</div>
+                            </div>
+                            <button class="text-xs font-bold text-white/60 hover:text-white border border-white/10 px-2 py-0.5 rounded-md cursor-pointer transition-all" onclick="openAddFormDefault()">+ 일정 생성</button>
+                        </div>
+                        <div class="grid grid-cols-7 gap-y-2 text-center text-xs font-medium text-white/50 mb-2">
+                            <div class="text-red-400/50 font-bold">S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div class="text-blue-400/50 font-bold">S</div>
+                        </div>
+                        <div class="grid grid-cols-7 gap-y-1 text-center text-xs font-medium text-white/70" id="calendar-grid">
+                            <!-- JS 엔진 동적 렌더링 영역 -->
+                        </div>
+                        
+                        <!-- 일정 생성 폼 -->
+                        <div class="mt-4 hidden animate-fade-up p-3 bg-black/40 rounded-xl border border-white/10" id="home-cal-form">
+                            <div class="text-[11px] font-bold text-emerald-400 font-mono mb-2 uppercase tracking-wider">NEW SCHEDULE</div>
+                            <div class="grid grid-cols-5 gap-1 text-xs mb-2 text-center font-mono">
+                                <input type="number" id="form-year" class="bg-white/5 border border-white/10 rounded py-0.5 text-white outline-none" placeholder="년">
+                                <input type="number" id="form-month" min="1" max="12" class="bg-white/5 border border-white/10 rounded py-0.5 text-white outline-none" placeholder="월">
+                                <input type="number" id="form-day" min="1" max="31" class="bg-white/5 border border-white/10 rounded py-0.5 text-white outline-none" placeholder="일">
+                                <input type="number" id="form-hour" min="0" max="23" class="bg-white/5 border border-white/10 rounded py-0.5 text-white outline-none" placeholder="시">
+                                <input type="number" id="form-min" min="0" max="59" class="bg-white/5 border border-white/10 rounded py-0.5 text-white outline-none" placeholder="분">
+                            </div>
+                            <input class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white outline-none placeholder:text-white/20 mb-2" id="home-cal-input" placeholder="일정 명칭 및 세부 내용..."/>
+                            
+                            <!-- 공유 대상 타겟 입력 필드 -->
+                            <div class="flex items-center gap-1.5 bg-black/30 border border-white/5 rounded-lg px-2 py-1">
+                                <span class="text-[10px] text-white/40 shrink-0 font-medium">공유 대상:</span>
+                                <input type="text" id="form-share" class="bg-transparent w-full border-none text-xs text-white outline-none placeholder:text-white/20" placeholder="이름 입력 (쉼표로 구분 예: 이현린, 박책임)">
+                            </div>
+
+                            <div class="flex gap-2 mt-2.5 text-xs font-bold">
+                                <button class="flex-1 bg-white text-slate-900 py-1 rounded-md cursor-pointer" onclick="addCalendarData()">등록</button>
+                                <button class="flex-1 bg-white/5 text-white/40 py-1 rounded-md cursor-pointer" onclick="closeAddForm()">취소</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 하단 타임라인 피드 전체보기 목록 -->
+                    <div class="mt-4 pt-3 border-t border-white/5 flex flex-col gap-1.5 flex-1 overflow-y-auto max-h-[110px]">
+                        <span class="text-[9px] font-mono tracking-widest text-white/30 uppercase block mb-1">TOTAL TIMELINE</span>
+                        <div class="space-y-1.5" id="home-cal-events"></div>
+                    </div>
+                </div>
+                
+                <!-- 가운데 두 번째 열: WORK STATION -->
+                <div class="flex flex-col pt-5 md:pt-0 md:px-6 relative">
+                    <div class="flex justify-between items-center pb-2.5 mb-3">
+                        <div>
+                            <h4 class="text-sm font-bold text-white uppercase tracking-wider">WORK STATION</h4>
+                            <span class="text-[10px] text-white/30 font-mono">PROJECT WORKSPACE</span>
+                        </div>
+                        <button class="w-7 h-7 bg-white/5 border border-white/10 text-white rounded-lg flex items-center justify-center text-xs cursor-pointer hover:bg-white/10 transition-all" onclick="toggleTodoForm()">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+
+                    <div class="flex flex-wrap gap-1 mb-3 font-mono text-[10px]" id="todo-project-filter-bar">
+                        <button class="font-bold px-2.5 py-0.5 rounded border border-white/10 bg-white text-slate-900 cursor-pointer" id="pfilter-all" onclick="filterTodoProject('all', this)">#ALL</button>
+                        <button class="font-medium px-2.5 py-0.5 rounded border border-white/5 bg-white/5 text-white/40 hover:text-white cursor-pointer" onclick="filterTodoProject('LOIND_Web', this)">#LOIND_Web</button>
+                        <button class="font-medium px-2.5 py-0.5 rounded border border-white/5 bg-white/5 text-white/40 hover:text-white cursor-pointer" onclick="filterTodoProject('Platform_App', this)">#Platform_App</button>
+                    </div>
+
+                    <!-- 업무 등록 폼 -->
+                    <div class="glass-input rounded-xl p-3 mb-3 hidden animate-fade-up" id="todo-add-form">
+                        <input class="w-full bg-transparent border-none text-white text-xs outline-none mb-2.5 placeholder:text-white/20" id="todo-add-input" placeholder="업무 태스크를 입력하세요..."/>
+                        
+                        <div class="grid grid-cols-2 gap-2 mb-2.5 text-[10px] font-mono">
+                            <div class="bg-black/30 border border-white/5 rounded p-1">
+                                <span class="text-white/30 block mb-0.5">시작일 (Day):</span>
+                                <input type="number" id="todo-start-day" min="1" max="31" value="25" class="w-full bg-transparent border-none outline-none text-white font-bold">
+                            </div>
+                            <div class="bg-black/30 border border-white/5 rounded p-1">
+                                <span class="text-white/30 block mb-0.5">마감일 (Due Day):</span>
+                                <input type="number" id="todo-due-day" min="1" max="31" value="28" class="w-full bg-transparent border-none outline-none text-emerald-400 font-bold">
+                            </div>
+                        </div>
+
+                        <div class="flex gap-1.5 mb-2 items-center">
+                            <span class="text-[10px] text-white/40">배정 프로젝트:</span>
+                            <select id="todo-add-tag" class="bg-black/60 text-[10px] border border-white/10 rounded px-1.5 py-0.5 text-white/80 outline-none">
+                                <option value="LOIND_Web">#LOIND_Web</option>
+                                <option value="Platform_App">#Platform_App</option>
+                                <option value="Brand_Identity">#Brand_Identity</option>
+                                <option value="NAS_System">#NAS_System</option>
+                            </select>
+                        </div>
+                        <div class="flex justify-end gap-1.5 text-xs font-bold">
+                            <button class="px-2 py-0.5 rounded border border-white/10 text-white/50" onclick="toggleTodoForm()">취소</button>
+                            <button class="px-2 py-0.5 rounded bg-white text-slate-900" onclick="addTodo()">배정</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5 flex-1 overflow-y-auto max-h-[250px] pr-1" id="todo-list"></div>
+
+                    <div class="flex items-center justify-between pt-3 border-t border-white/5 mt-4">
+                        <div class="flex-1 h-1 bg-white/10 rounded-full overflow-hidden mr-3">
+                            <div class="h-full bg-gradient-to-r from-emerald-400 to-blue-500 transition-all duration-300" id="todo-stat-fill" style="width:0%"></div>
+                        </div>
+                        <span class="text-[10px] font-mono text-white/30 whitespace-nowrap" id="todo-stat-text">0% 완료</span>
+                    </div>
+
+                    <div class="absolute glass-blur-heavy rounded-xl p-1.5 shadow-2xl border border-white/20 flex flex-col gap-0.5 hidden z-30" id="todo-status-dropdown">
+                        <button onclick="changeTodoStatusActive('대기')" class="text-[10px] font-bold px-3 py-1 rounded text-left hover:bg-emerald-500/20 text-emerald-400 cursor-pointer">대기</button>
+                        <button onclick="changeTodoStatusActive('진행')" class="text-[10px] font-bold px-3 py-1 rounded text-left hover:bg-amber-500/20 text-amber-400 cursor-pointer">진행</button>
+                        <button onclick="changeTodoStatusActive('컨펌')" class="text-[10px] font-bold px-3 py-1 rounded text-left hover:bg-blue-500/20 text-blue-400 cursor-pointer">컨펌</button>
+                        <button onclick="changeTodoStatusActive('완료')" class="text-[10px] font-bold px-3 py-1 rounded text-left hover:bg-purple-500/20 text-purple-400 border-t border-white/10 cursor-pointer">완료 (목록 제외)</button>
+                    </div>
+                </div>
+
+                <!-- 오른쪽 세 번째 열: 개인 메모 -->
+                <div class="flex flex-col pt-5 md:pt-0 md:pl-6">
+                    <div class="flex justify-between items-center pb-2.5 mb-3">
+                        <div>
+                            <h4 class="text-sm font-bold text-white">개인 메모</h4>
+                            <span class="text-[10px] text-white/30 tracking-wider">CUSTOM FOLDER LOG</span>
+                        </div>
+                        <div class="flex gap-1">
+                            <button class="text-[10px] bg-white/5 border border-white/10 hover:bg-white/10 px-1.5 py-0.5 rounded text-white/60 hover:text-white transition-all cursor-pointer" onclick="createNewFolderPrompt()">+ 폴더</button>
+                            <button class="w-7 h-7 bg-white/5 border border-white/10 text-white rounded-lg flex items-center justify-center text-xs cursor-pointer hover:bg-white/10 transition-all" onclick="toggleMemoCompose()">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-1.5 mb-3 overflow-x-auto pb-1" id="memo-folder-bar"></div>
+
+                    <div class="glass-input rounded-xl p-3.5 mb-3 hidden animate-fade-up" id="memo-compose">
+                        <input class="w-full bg-transparent border-b border-white/5 pb-1 mb-2 text-white text-xs font-bold outline-none placeholder:text-white/20" id="memo-compose-title" placeholder="제목을 입력하세요."/>
+                        <div class="flex justify-between mb-2 items-center">
+                            <select id="memo-compose-folder" class="bg-black/40 text-[10px] border border-white/10 rounded px-1.5 py-0.5 text-white/70 outline-none"></select>
+                            <label class="text-[10px] text-white/50 flex items-center gap-1 cursor-pointer select-none">
+                                <input type="checkbox" id="memo-compose-star" class="rounded accent-emerald-500"> ⭐ 중요 고정
+                            </label>
+                        </div>
+                        <textarea class="w-full bg-transparent text-white text-xs outline-none min-h-[50px] resize-none placeholder:text-white/20 leading-relaxed" id="memo-compose-body" placeholder="내용을 기록하세요..."></textarea>
+                        <div class="flex justify-end gap-1.5 mt-2 text-xs font-bold">
+                            <button class="px-2.5 py-0.5 rounded border border-white/10 text-white/50" onclick="toggleMemoCompose()">취소</button>
+                            <button class="px-2.5 py-0.5 rounded bg-white text-slate-900" onclick="addMemo()">저장</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2.5 flex-1 overflow-y-auto max-h-[300px] pr-1" id="memo-list"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 우측 영역: 2차 스코프 - PERSONAL PROFILE STATION -->
+        <div class="lg:col-span-4 glass-panel rounded-2xl p-8 flex flex-col items-center justify-center text-center shadow-2xl h-full min-h-[536px]">
+            <div class="flex flex-col items-center gap-5 w-full">
+                <!-- 아바타 이미지 배치 컨테이너 -->
+                <div class="relative group">
+                    <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-emerald-400 to-blue-500 blur-md opacity-40 group-hover:opacity-70 transition-all duration-500"></div>
+                    <div class="w-32 h-32 rounded-full border-2 border-white/20 overflow-hidden relative z-10 bg-black/40 flex items-center justify-center shadow-inner">
+                        <!-- 데모용 고해상도 미니멀 아바타 플레이스홀더 (추후 실사진 변경 가능) -->
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" alt="이현린 PM" class="w-full h-full object-cover">
+                    </div>
+                    <span class="absolute bottom-1 right-2 w-4 h-4 bg-emerald-400 border-2 border-slate-900 rounded-full z-20 animate-pulse"></span>
+                </div>
+
+                <!-- 이름 및 인포메이션 디스플레이 -->
+                <div class="flex flex-col gap-1 mt-2">
+                    <h3 class="text-2xl font-bold tracking-tight text-white/95">이현린</h3>
+                    <div class="logo-font text-emerald-400 text-sm tracking-widest font-medium">PROJECT MANAGER</div>
+                    <div class="text-[10px] font-mono text-white/40 mt-1 uppercase tracking-wider bg-white/5 px-2.5 py-0.5 rounded-full border border-white/5">LOIND CORE TEAM</div>
+                </div>
+
+                <div class="w-full border-t border-white/10 my-2"></div>
+                <div class="text-[11px] text-white/30 max-w-[240px] leading-relaxed font-sans">개인화 대시보드 모듈 연동 대기 중입니다.<br>다음 지시 사항에 맞춰 커스텀 위젯 및 독립 워크스페이스 공간이 확장됩니다.</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 날짜별 스마트 팝업 레이어 -->
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[250] flex items-center justify-center p-4 hidden" id="cal-view-modal" onclick="closeCalViewModal(event)">
+        <div class="glass-blur-heavy rounded-2xl w-full max-w-sm overflow-hidden flex flex-col shadow-2xl animate-fade-up">
+            <div class="flex items-center justify-between px-5 py-3.5 border-b border-white/10 bg-white/5">
+                <div class="flex flex-col">
+                    <span class="text-[10px] font-mono tracking-widest text-emerald-400 font-bold uppercase">Workstation Scheduler</span>
+                    <h5 class="text-xs font-bold text-white font-mono mt-0.5" id="cal-view-date-title">2026.05.25</h5>
+                </div>
+                <button class="text-white/40 hover:text-white p-1 text-sm cursor-pointer" onclick="closeCalViewModalBtn()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-5 overflow-y-auto max-h-[300px] space-y-3" id="cal-view-modal-list"></div>
+            <div class="px-5 py-3 border-t border-white/10 flex justify-end gap-1.5 bg-black/20 text-xs font-bold">
+                <button class="px-3 py-1 rounded bg-white/10 text-white hover:bg-white/20" onclick="triggerAddFormFromModal()">+ 일정 추가</button>
+                <button class="px-3 py-1 rounded bg-white text-slate-900" onclick="closeCalViewModalBtn()">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 메모 모달 레이어 -->
+    <div class="fixed inset-0 bg-black/40 backdrop-blur-md z-[200] flex items-center justify-center p-4 hidden" id="memo-overlay" onclick="closeMemoModal(event)">
+        <div class="glass-blur-heavy rounded-2xl w-full max-w-lg overflow-hidden flex flex-col shadow-2xl animate-fade-up">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
+                <input class="text-sm font-bold text-white bg-transparent border-none outline-none flex-1" id="memo-modal-title" placeholder="제목"/>
+                <button class="text-white/40 hover:text-white p-1" onclick="closeMemoModalBtn()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-6 flex-1">
+                <textarea class="w-full bg-transparent text-white/90 text-sm leading-relaxed outline-none min-h-[240px] resize-none" id="memo-modal-body" placeholder="내용을 입력하세요..."></textarea>
+            </div>
+            <div class="px-6 py-3.5 border-t border-white/10 flex justify-between items-center bg-black/20">
+                <span class="text-xs font-mono text-white/30" id="memo-modal-date"></span>
+                <div class="flex gap-2 text-xs font-semibold">
+                    <button class="px-3.5 py-1 rounded border border-white/10 text-white/60 hover:bg-white/5" onclick="closeMemoModalBtn()">닫기</button>
+                    <button class="px-3.5 py-1 rounded bg-white text-slate-900 hover:opacity-90" onclick="saveMemoFromModal()">저장</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    let playing = false; let volume = 70; let volDragging = false;
+    const discWrap = document.getElementById('disc-wrap'); const discEl = document.getElementById('disc'); const discLabel = document.getElementById('disc-label');
+    const volTrack = document.getElementById('vol-track'); const volFill = document.getElementById('vol-fill'); const volThumb = document.getElementById('vol-thumb'); const volVal = document.getElementById('vol-val'); const volIcon = document.getElementById('vol-icon');
+
+    discWrap.addEventListener('click', (e) => {
+        if (e.target.closest('#vol-track') || e.target.closest('#vol-thumb')) return;
+        playing = !playing; 
+        if(playing) { discEl.classList.add('spin-active'); discLabel.textContent = '정지'; } 
+        else { discEl.classList.remove('spin-active'); discLabel.textContent = '재생'; }
+    });
+
+    function setVolume(v) {
+        volume = Math.max(0, Math.min(100, v)); volFill.style.width = volume + '%'; volThumb.style.left = volume + '%'; volVal.textContent = volume;
+        if (volume === 0) volIcon.className = 'fa-solid fa-volume-xmark text-xs text-white/40';
+        else if (volume < 40) volIcon.className = 'fa-solid fa-volume-low text-xs text-white/60';
+        else volIcon.className = 'fa-solid fa-volume-high text-xs text-white/80';
+    }
+    function getVolFromX(e) { const rect = volTrack.getBoundingClientRect(); return Math.round(Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width)) * 100); }
+    volTrack.addEventListener('mousedown', (e) => { e.preventDefault(); volDragging = true; setVolume(getVolFromX(e)); });
+    volThumb.addEventListener('mousedown', (e) => { e.preventDefault(); volDragging = true; });
+    document.addEventListener('mousemove', (e) => { if (volDragging) setVolume(getVolFromX(e)); });
+    document.addEventListener('mouseup', () => { volDragging = false; });
+
+    function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+    function fmtNow(){const n=new Date();return `${n.getFullYear()}.${String(n.getMonth()+1).padStart(2,'0')}.${String(n.getDate()).padStart(2,'0')}  ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;}
+
+    /* ── 캘린더 전용 중앙 핵심 데이터셋 ── */
+    let calendarEvents = [
+        { id: 1, year: 2026, month: 5, day: 25, hour: 10, min: 0, title: '팀 위클리 마일스톤 설계 브리핑', shares: ['이현린', '박 책임'] },
+        { id: 2, year: 2026, month: 5, day: 25, hour: 15, min: 30, title: '메인 파싱 데이터 모듈 구조 감수', shares: ['이현린'] },
+        { id: 3, year: 2026, month: 5, day: 28, hour: 14, min: 0, title: '디자인 레이아웃 그리드 최종 컨펌 회의', shares: ['김 디자이너'] }
+    ];
+    
+    let activeSelectedDayModal = 25;
+
+    function refreshCalendarCore() {
+        const now = new Date();
+        renderSmartCalendar(now);
+        renderFullTimelineFeed();
+    }
+
+    function renderFullTimelineFeed() {
+        const target = document.getElementById('home-cal-events');
+        if (!calendarEvents.length) {
+            target.innerHTML = '<div class="text-center py-4 text-white/20 text-[10px] font-mono">NO LOGGED EVENTS</div>';
+            return;
+        }
+        const sorted = [...calendarEvents].sort((a,b) => (a.year - b.year) || (a.month - b.month) || (a.day - b.day) || (a.hour - b.hour) || (a.min - b.min));
+
+        target.innerHTML = sorted.map(e => `
+            <div class="flex items-center justify-between text-[11px] py-1 hover:bg-white/5 px-2 rounded-lg transition-all border border-transparent hover:border-white/5">
+                <div class="flex items-center gap-2 truncate flex-1 min-w-0 font-mono">
+                    <span class="text-[9px] text-emerald-400 font-bold border border-emerald-500/20 bg-emerald-500/5 px-1 rounded shrink-0">
+                        ${String(e.month).padStart(2,'0')}.${String(e.day).padStart(2,'0')} ${String(e.hour).padStart(2,'0')}:${String(e.min).padStart(2,'0')}
+                    </span>
+                    <span class="text-white/80 font-medium truncate flex-1">${esc(e.title)}</span>
+                </div>
+                <button class="text-white/20 hover:text-white shrink-0 pl-1.5 cursor-pointer" onclick="deleteCalendarData(${e.id})">
+                    <i class="fa-solid fa-xmark text-[10px]"></i>
+                </button>
+            </div>
+        `).join('');
+    }
+
+    function renderSmartCalendar(now) {
+        const year = now.getFullYear();
+        const month = now.getMonth();
+        const todayDate = now.getDate();
+
+        const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+        document.getElementById('cal-month-title').textContent = `${monthNames[month]} ${year}`;
+
+        const firstDayIdx = new Date(year, month, 1).getDay();
+        const lastDate = new Date(year, month + 1, 0).getDate();
+
+        const grid = document.getElementById('calendar-grid');
+        grid.innerHTML = '';
+
+        for (let i = 0; i < firstDayIdx; i++) {
+            const blank = document.createElement('div');
+            blank.className = 'py-2';
+            grid.appendChild(blank);
+        }
+
+        for (let day = 1; day <= lastDate; day++) {
+            const cell = document.createElement('div');
+            cell.className = 'py-1 rounded-md transition-all select-none font-mono relative flex flex-col items-center justify-center cursor-pointer min-h-[38px] text-white/60';
+            
+            const numSpan = document.createElement('span');
+            numSpan.textContent = day;
+            cell.appendChild(numSpan);
+
+            const currentDayOfWeek = (firstDayIdx + day - 1) % 7;
+            if (currentDayOfWeek === 0) cell.classList.add('text-red-400/60');
+            if (currentDayOfWeek === 6) cell.classList.add('text-blue-400/60');
+
+            // [오늘 날짜 하이라이팅 버그 수정]: 글씨가 선명하게 보이도록 text-slate-900 클래스 유지
+            if (day === todayDate) {
+                cell.className = 'bg-white text-slate-900 font-bold rounded-md shadow-md scale-105 z-10 flex flex-col items-center justify-center min-h-[38px]';
+            } else {
+                cell.classList.add('hover:bg-white/10', 'hover:text-white');
+            }
+
+            const hasEvent = calendarEvents.some(x => x.year === year && x.month === (month + 1) && x.day === day);
+            const hasTodoDue = todos.some(t => t.dueDay === day && t.status !== '완료');
+
+            if (hasEvent || hasTodoDue) {
+                const dotContainer = document.createElement('div');
+                dotContainer.className = 'flex gap-0.5 mt-0.5 justify-center items-center';
+                
+                if (hasEvent) {
+                    const dotE = document.createElement('div');
+                    dotE.className = `w-1 h-1 rounded-full ${day === todayDate ? 'bg-slate-900' : 'bg-emerald-400'}`;
+                    dotContainer.appendChild(dotE);
+                }
+                if (hasTodoDue) {
+                    const dotT = document.createElement('div');
+                    dotT.className = `w-1 h-1 rounded-full ${day === todayDate ? 'bg-indigo-950' : 'bg-blue-400'}`;
+                    dotContainer.appendChild(dotT);
+                }
+                cell.appendChild(dotContainer);
+            }
+
+            cell.onclick = () => { openCalViewModal(year, month + 1, day); };
+            grid.appendChild(cell);
+        }
+    }
+
+    /* ── 통합 스케줄 뷰어 모달 ── */
+    function openCalViewModal(y, m, d) {
+        activeSelectedDayModal = d;
+        document.getElementById('cal-view-date-title').textContent = `${y}.${String(m).padStart(2,'0')}.${String(d).padStart(2,'0')}`;
+        
+        const dayEvents = calendarEvents.filter(x => x.year === y && x.month === m && x.day === d);
+        const dayTodos = todos.filter(x => x.dueDay === d && x.status !== '완료');
+        
+        const listContainer = document.getElementById('cal-view-modal-list');
+        listContainer.innerHTML = '';
+
+        if (!dayEvents.length && !dayTodos.length) {
+            listContainer.innerHTML = '<div class="text-center py-6 text-white/30 text-xs font-medium">기록된 일정 및 마감 업무가 없습니다.</div>';
+            return;
+        }
+
+        if (dayEvents.length > 0) {
+            dayEvents.sort((a,b)=> (a.hour - b.hour) || (a.min - b.min));
+            dayEvents.forEach(e => {
+                let shareChips = '';
+                if(e.shares && e.shares.length > 0) {
+                    shareChips = `<div class="flex flex-wrap gap-1 mt-1">` + 
+                        e.shares.map(s => `<span class="text-[8px] bg-white/10 text-white/60 px-1 rounded-sm">👥 ${esc(s)}</span>`).join('') + 
+                        `</div>`;
+                }
+                
+                const item = document.createElement('div');
+                item.className = 'p-2.5 bg-white/5 rounded-xl border border-white/5 flex flex-col gap-1 relative group';
+                item.innerHTML = `
+                    <div class="flex items-center gap-1.5 text-[10px] font-mono text-emerald-400 font-semibold">
+                        <i class="fa-regular fa-clock"></i> ${String(e.hour).padStart(2,'0')}:${String(e.min).padStart(2,'0')}
+                    </div>
+                    <div class="text-xs text-white/90 font-medium break-all leading-relaxed">${esc(e.title)}</div>
+                    ${shareChips}
+                    <button class="absolute top-2 right-2 text-white/20 hover:text-red-400 cursor-pointer opacity-0 group-hover:opacity-100 transition-all" onclick="deleteCalendarData(${e.id}); openCalViewModal(${y},${m},${d});">
+                        <i class="fa-solid fa-trash-can text-[10px]"></i>
+                    </button>
+                `;
+                listContainer.appendChild(item);
+            });
+        }
+
+        if (dayTodos.length > 0) {
+            dayTodos.forEach(t => {
+                const item = document.createElement('div');
+                item.className = 'p-2.5 bg-blue-500/[0.04] border border-blue-500/20 rounded-xl flex flex-col gap-1';
+                item.innerHTML = `
+                    <div class="flex items-center justify-between text-[9px] font-mono font-bold text-blue-400">
+                        <span><i class="fa-solid fa-triangle-exclamation"></i> WORK STATION DUE TASK</span>
+                        <span class="bg-blue-500/10 border border-blue-500/20 px-1 rounded">#${esc(t.tag)}</span>
+                    </div>
+                    <div class="text-xs text-blue-100/90 font-medium break-all leading-relaxed">${esc(t.text)}</div>
+                    <div class="text-[9px] text-white/30 font-mono">기간: ${t.startDay}일 ~ ${t.dueDay}일 (현재 상태: ${t.status})</div>
+                `;
+                listContainer.appendChild(item);
+            });
+        }
+
+        document.getElementById('cal-view-modal').classList.remove('hidden');
+    }
+
+    function closeCalViewModalBtn() { document.getElementById('cal-view-modal').classList.add('hidden'); }
+    function closeCalViewModal(e) { if(e.target===document.getElementById('cal-view-modal')) closeCalViewModalBtn(); }
+
+    function triggerAddFormFromModal() {
+        closeCalViewModalBtn();
+        const now = new Date();
+        document.getElementById('form-year').value = now.getFullYear();
+        document.getElementById('form-month').value = now.getMonth() + 1;
+        document.getElementById('form-day').value = activeSelectedDayModal;
+        document.getElementById('form-hour').value = now.getHours();
+        document.getElementById('form-min').value = 0;
+        document.getElementById('form-share').value = '';
+        
+        document.getElementById('home-cal-form').classList.remove('hidden');
+        document.getElementById('home-cal-input').focus();
+    }
+
+    function openAddFormDefault() {
+        const now = new Date();
+        document.getElementById('form-year').value = 2026;
+        document.getElementById('form-month').value = 5;
+        document.getElementById('form-day').value = 25;
+        document.getElementById('form-hour').value = now.getHours();
+        document.getElementById('form-min').value = 0;
+        document.getElementById('form-share').value = '';
+        
+        document.getElementById('home-cal-form').classList.remove('hidden');
+        document.getElementById('home-cal-input').focus();
+    }
+    
+    function closeAddForm() { document.getElementById('home-cal-form').classList.add('hidden'); }
+
+    function addCalendarData() {
+        const y = parseInt(document.getElementById('form-year').value, 10);
+        const m = parseInt(document.getElementById('form-month').value, 10);
+        const d = parseInt(document.getElementById('form-day').value, 10);
+        const h = parseInt(document.getElementById('form-hour').value, 10);
+        const min = parseInt(document.getElementById('form-min').value, 10);
+        const txt = document.getElementById('home-cal-input').value.trim();
+        const shareVal = document.getElementById('form-share').value.trim();
+
+        if(!txt || isNaN(y) || isNaN(m) || isNaN(d) || isNaN(h) || isNaN(min)) return;
+        if(m < 1 || m > 12 || d < 1 || d > 31 || h < 0 || h > 23 || min < 0 || min > 59) return;
+
+        let sharesArray = [];
+        if(shareVal) {
+            sharesArray = shareVal.split(',').map(s => s.trim()).filter(s => s.length > 0);
+        }
+
+        calendarEvents.push({ 
+            id: Date.now(), year: y, month: m, day: d, hour: h, min: min, title: txt, shares: sharesArray 
+        });
+        
+        document.getElementById('home-cal-input').value = '';
+        document.getElementById('form-share').value = '';
+        closeAddForm();
+        refreshCalendarCore();
+    }
+
+    function deleteCalendarData(id) {
+        calendarEvents = calendarEvents.filter(x => x.id !== id);
+        refreshCalendarCore();
+    }
+
+    /* ── WORK STATION 태스크 관리 엔진 코어 ── */
+    let todos = [
+        {id:1, text:'네비게이터 모듈 연동 데이터 파싱 설계', status:'진행', tag:'LOIND_Web', startDay: 25, dueDay: 28},
+        {id:2, text:'대시보드 전폭 해상도 레이아웃 그리드 감수', status:'대기', tag:'Brand_Identity', startDay: 24, dueDay: 25},
+        {id:3, text:'NAS 내부 스토리지 폴더 연동 사전 조사', status:'컨펌', tag:'NAS_System', startDay: 22, dueDay: 23},
+    ];
+    let todoSelectedProject = 'all'; 
+    let activeTodoIdForDropdown = null;
+
+    function toggleTodoForm() { 
+        const f = document.getElementById('todo-add-form'); f.classList.toggle('hidden'); 
+        if (!f.classList.contains('hidden')) { document.getElementById('todo-add-input').focus(); } 
+    }
+    
+    function addTodo() {
+        const inp = document.getElementById('todo-add-input'); const text = inp.value.trim(); if (!text) { inp.focus(); return; }
+        const tag = document.getElementById('todo-add-tag').value;
+        
+        const startDayVal = parseInt(document.getElementById('todo-start-day').value, 10) || 25;
+        const dueDayVal = parseInt(document.getElementById('todo-due-day').value, 10) || 25;
+        
+        todos.unshift({
+            id: Date.now(), 
+            text, 
+            status: '대기', 
+            tag, 
+            startDay: startDayVal, 
+            dueDay: dueDayVal
+        }); 
+        
+        inp.value = ''; 
+        document.getElementById('todo-add-form').classList.add('hidden'); 
+        
+        renderTodos();
+        refreshCalendarCore();
+    }
+    
+    function filterTodoProject(projName, btn) {
+        todoSelectedProject = projName;
+        document.querySelectorAll('#todo-project-filter-bar button').forEach(b => {
+            b.classList.remove('bg-white', 'text-slate-900', 'font-bold');
+            b.classList.add('bg-white/5', 'text-white/40', 'font-medium');
+        });
+        btn.classList.add('bg-white', 'text-slate-900', 'font-bold');
+        btn.classList.remove('bg-white/5', 'text-white/40', 'font-medium');
+        renderTodos();
+    }
+
+    function openStatusDropdown(id, event) {
+        event.stopPropagation();
+        activeTodoIdForDropdown = id;
+        const drop = document.getElementById('todo-status-dropdown');
+        drop.classList.remove('hidden');
+        
+        const rect = event.target.getBoundingClientRect();
+        drop.style.top = (window.scrollY + rect.bottom + 6) + 'px';
+        drop.style.left = (window.scrollX + rect.left) + 'px';
+    }
+
+    function changeTodoStatusActive(statusName) {
+        if (!activeTodoIdForDropdown) return;
+        const t = todos.find(x => x.id === activeTodoIdForDropdown);
+        if (t) {
+            t.status = statusName;
+            renderTodos();
+            refreshCalendarCore();
+        }
+        hideStatusDropdown();
+    }
+
+    function hideStatusDropdown() {
+        document.getElementById('todo-status-dropdown').classList.add('hidden');
+        activeTodoIdForDropdown = null;
+    }
+
+    document.addEventListener('click', () => { hideStatusDropdown(); });
+
+    const STATUS_ATTR = {
+        '대기': { cls: 'border-emerald-500/40 text-emerald-400 bg-emerald-500/10' },
+        '진행': { cls: 'border-amber-500/40 text-amber-400 bg-amber-500/10' },
+        '컨펌': { cls: 'border-blue-500/40 text-blue-400 bg-blue-500/10' },
+        '완료': { cls: 'border-purple-500/40 text-purple-400 bg-purple-500/10' }
+    };
+
+    function renderTodos() {
+        const list = document.getElementById('todo-list'); 
+        let filtered = todos.filter(t => t.status !== '완료');
+        
+        if (todoSelectedProject !== 'all') {
+            filtered = filtered.filter(t => t.tag === todoSelectedProject);
+        }
+        
+        if (!filtered.length) { 
+            list.innerHTML = '<div class="text-center py-5 text-white/20 text-xs select-none">No active tasks in this scope</div>'; 
+        } else { 
+            list.innerHTML = filtered.map(t => {
+                const attr = STATUS_ATTR[t.status];
+                return `
+                <div class="flex items-center justify-between p-2 rounded-xl hover:bg-white/5 transition-all">
+                    <div class="flex items-start gap-3 flex-1 min-w-0">
+                        <button onclick="openStatusDropdown(${t.id}, event)" class="text-[10px] font-bold px-2 py-0.5 rounded-md border cursor-pointer select-none whitespace-nowrap transition-all ${attr.cls}">
+                            ${t.status} <i class="fa-solid fa-chevron-down text-[7px] ml-0.5 opacity-60"></i>
+                        </button>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-[9px] font-mono font-bold text-white/40 bg-white/5 px-1.5 py-0.2 rounded border border-white/5">#${esc(t.tag)}</span>
+                                <span class="text-[9px] text-emerald-400 font-mono font-medium bg-emerald-500/5 border border-emerald-500/10 px-1 rounded">📅 ${t.startDay}일 ~ ${t.dueDay}일</span>
+                            </div>
+                            <div class="text-xs font-medium text-white/90 truncate">${esc(t.text)}</div>
+                        </div>
+                    </div>
+                </div>
+            `}).join(''); 
+        }
+        
+        const total = todos.length, done = todos.filter(t=>t.status==='완료').length; 
+        const pct = total ? Math.round(done/total*100) : 0;
+        document.getElementById('todo-stat-fill').style.width = pct+'%'; 
+        document.getElementById('todo-stat-text').textContent = pct + '% 완료';
+    }
+
+    /* ── 개인 메모 ── */
+    let memoFolders = ['전체', '레퍼런스', '아이디어', '개인기록'];
+    let memoCurrentFolder = '전체';
+    let memos = [
+        {id:1, title:'브랜드 톤앤매너 메모', folder:'레퍼런스', star:true, body:'- 단어 선택: 간결하고 직접적\n- 이모지 사용 자제', date:'2026.05.21'},
+        {id:2, title:'신규 프로젝트 아이디어', folder:'아이디어', star:false, body:'인공지능 대시보드 구조 커스텀 위젯 연동 기획안 문서 작성.', date:'2026.05.20'},
+    ];
+    let currentMemoId = null;
+    
+    function createNewFolderPrompt() {
+        const fName = prompt('새로 추가할 메모 폴더명을 입력하세요:');
+        if (!fName || fName.trim() === '') return;
+        const cleanName = fName.trim();
+        if (memoFolders.includes(cleanName)) { alert('이미 존재하는 폴더명입니다.'); return; }
+        memoFolders.push(cleanName);
+        renderFolderTabs();
+        updateMemoComposeSelect();
+    }
+
+    function renderFolderTabs() {
+        const bar = document.getElementById('memo-folder-bar');
+        bar.innerHTML = memoFolders.map(f => {
+            const isActive = memoCurrentFolder === f;
+            return `
+                <button class="text-[10px] font-medium transition-all shrink-0 cursor-pointer px-1 py-0.5 ${isActive ? 'text-white font-bold border-b-2 border-white' : 'text-white/40 hover:text-white'}" 
+                        onclick="filterMemoFolder('${f}')">
+                    ${f === '전체' ? f : '📁 ' + f}
+                </button>
+            `;
+        }).join('');
+    }
+
+    function updateMemoComposeSelect() {
+        const sel = document.getElementById('memo-compose-folder');
+        if(!sel) return;
+        const targets = memoFolders.filter(f => f !== '전체');
+        sel.innerHTML = targets.map(f => `<option value="${f}">📁 ${f}</option>`).join('');
+    }
+
+    function filterMemoFolder(folderName) {
+        memoCurrentFolder = folderName;
+        renderFolderTabs();
+        renderMemos();
+    }
+
+    function toggleMemoCompose() { 
+        const c = document.getElementById('memo-compose'); c.classList.toggle('hidden'); 
+        if (!c.classList.contains('hidden')) { updateMemoComposeSelect(); document.getElementById('memo-compose-title').focus(); } 
+    }
+    
+    function addMemo() {
+        const title = document.getElementById('memo-compose-title').value.trim(); const body = document.getElementById('memo-compose-body').value.trim(); if (!title && !body) return;
+        const folder = document.getElementById('memo-compose-folder').value || '일반';
+        const star = document.getElementById('memo-compose-star').checked;
+        const now = fmtNow(); 
+        memos.unshift({id:Date.now(), title:title||'제목 없음', folder, star, body, date:now.split('  ')[0]});
+        document.getElementById('memo-compose-title').value=''; document.getElementById('memo-compose-body').value=''; document.getElementById('memo-compose-star').checked = false; document.getElementById('memo-compose').classList.add('hidden'); renderMemos();
+    }
+    
+    function toggleMemoStar(id, e) { e.stopPropagation(); const m = memos.find(x=>x.id===id); if(m) { m.star = !m.star; renderMemos(); } }
+    function deleteMemo(id) { memos=memos.filter(x=>x.id!==id); renderMemos(); }
+    function openMemoModal(id) {
+        const m = memos.find(x=>x.id===id); if(!m) return; currentMemoId = id;
+        document.getElementById('memo-modal-title').value = m.title; document.getElementById('memo-modal-body').value = m.body; document.getElementById('memo-modal-date').textContent = m.date; document.getElementById('memo-overlay').classList.remove('hidden');
+    }
+    function saveMemoFromModal() {
+        const m = memos.find(x=>x.id===currentMemoId); if(!m) return;
+        m.title = document.getElementById('memo-modal-title').value.trim()||'제목 없음'; m.body = document.getElementById('memo-modal-body').value; renderMemos(); closeMemoModalBtn();
+    }
+    function closeMemoModal(e) { if(e.target===document.getElementById('memo-overlay')) closeMemoModalBtn(); }
+    function closeMemoModalBtn() { document.getElementById('memo-overlay').classList.add('hidden'); currentMemoId=null; }
+    
+    function renderMemos() {
+        const list = document.getElementById('memo-list'); 
+        let filtered = memoCurrentFolder === '전체' ? memos : memos.filter(m => m.folder === memoCurrentFolder);
+        filtered.sort((a, b) => b.star - a.star);
+        
+        if (!filtered.length) { list.innerHTML='<div class="text-center py-5 text-white/20 text-xs">선택한 폴더에 메모가 없습니다.</div>'; return; }
+        list.innerHTML = filtered.map(m=>`
+            <div class="glass-card rounded-xl p-3 cursor-pointer flex flex-col justify-between hover:bg-white/10 relative ${m.star ? 'border-amber-500/30 bg-amber-500/[0.02]' : ''}" onclick="openMemoModal(${m.id})">
+                <div>
+                    <div class="flex justify-between items-start gap-2 mb-1.5">
+                        <div class="text-xs font-bold text-white/90 truncate flex-1 flex items-center gap-1">
+                            <span onclick="toggleMemoStar(${m.id}, event)" class="cursor-pointer ${m.star ? 'text-amber-400' : 'text-white/20 hover:text-amber-300'}">★</span>
+                            ${esc(m.title)}
+                        </div>
+                        <button class="text-white/20 hover:text-red-400 transition-all cursor-pointer" onclick="event.stopPropagation();deleteMemo(${m.id})"><i class="fa-solid fa-xmark text-xs"></i></button>
+                    </div>
+                    <div class="text-[11px] text-white/50 line-clamp-2 leading-relaxed whitespace-pre-wrap mb-2">${esc(m.body)}</div>
+                </div>
+                <div class="flex justify-between text-[9px] font-mono text-white/30">
+                    <span>📁 ${esc(m.folder)}</span>
+                    <span>${esc(m.date)}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    (function tickHome(){
+        const n = new Date();
+        const el = document.getElementById('clock-home');
+        if (el) el.textContent = String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+        setTimeout(tickHome, 60000);
+    })();
+
+    renderTodos();
+    renderFolderTabs();
+    renderMemos();
+    refreshCalendarCore();
+    </script>
+</body>
+</html
