@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LOIND Signal Hub</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  *{box-sizing:border-box}
+  body{font-family:'DM Sans',sans-serif}
+  .logo-font{font-family:'Bebas Neue',sans-serif}
+  .glass-heavy{background:rgba(12,16,13,.56);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);border:1px solid rgba(255,255,255,.14)}
+  .glass-panel{background:rgba(255,255,255,.05);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.11)}
+  .glass-card{background:rgba(255,255,255,.04);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08);box-shadow:0 50px 100px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.1)}
+  .glass-input{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 2px 4px rgba(0,0,0,.15)}
+  .glass-input:focus-within{border-color:#34d399;box-shadow:0 0 0 3px rgba(52,211,153,.13)}
+  .view{display:none}.view.active{display:flex}
+  .nav-btn.active{color:#34d399;background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.25)}
+  .project-row.active{background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.3)}
+  .project-row:hover{background:rgba(255,255,255,.07)}
+  ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:99px}
+  @media(max-width:1024px){.brand-side{display:none}.login-side{width:100%!important}.work-shell{grid-template-columns:1fr!important}.sidebar{display:none}.detail-grid{grid-template-columns:1fr!important}}
+</style>
+
+</head>
+<body class="m-0 text-white min-h-screen bg-slate-900 overflow-hidden bg-cover bg-center"
+style="background-image:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.5)),url('https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=2000&q=80')">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_35%,rgba(52,211,153,.08),transparent_36%)]"></div>
+<main class="relative z-10 min-h-screen flex">
+  <section class="brand-side flex-1 p-16 xl:p-28 flex flex-col justify-between">
+    <div></div>
+    <h1 class="logo-font text-[105px] xl:text-[135px] tracking-[.08em] leading-[.88] text-white/95">
+      LOIND<br><span class="text-emerald-400">CORPORATION</span>
+    </h1>
+    <div class="font-mono text-[10px] text-white/25 tracking-widest uppercase leading-5">
+      <div>LOER agency</div><div>LODEN creative tech studio</div>
+    </div>
+  </section>
+
+  <section class="login-side w-[680px] xl:w-[760px] p-6 sm:p-12 lg:p-16 flex items-center overflow-y-auto">
+    <div class="glass-card rounded-2xl p-7 sm:p-10 w-full max-w-2xl mx-auto max-h-[90vh] overflow-y-auto">
+      <div id="loginView" class="view active flex-col gap-5">
+        <div>
+          <p class="font-mono text-[10px] tracking-[.24em] text-emerald-400 mb-2">SIGNAL HUB / 01</p>
+          <h2 class="text-2xl font-bold">Login</h2>
+          <p class="text-xs text-white/40 mt-1">LOIND Signal Hub 워크스테이션 방문을 환영합니다.</p>
+        </div>
+        <form id="loginForm" class="flex flex-col gap-4 my-3">
+          <label class="flex flex-col gap-1.5">
+            <span class="text-[10px] font-mono font-bold text-white/30 tracking-wider uppercase ml-1">ID</span>
+            <span class="glass-input rounded-xl px-3.5 py-2.5"><input id="loginId" class="w-full bg-transparent outline-none text-sm" placeholder="이메일을 입력하세요" autocomplete="username"></span>
+          </label>
+          <label class="flex flex-col gap-1.5">
+            <span class="text-[10px] font-mono font-bold text-white/30 tracking-wider uppercase ml-1">Password</span>
+            <span class="glass-input rounded-xl px-3.5 py-2.5"><input id="loginPw" type="password" class="w-full bg-transparent outline-none text-sm" placeholder="비밀번호를 입력하세요" autocomplete="current-password"></span>
+          </label>
+          <p id="loginError" class="hidden text-[11px] text-rose-300"></p>
+          <button class="w-full py-3 bg-white text-slate-950 font-bold text-xs rounded-xl hover:opacity-90 active:scale-[.99] transition">로그인</button>
+        </form>
+        <div class="pt-5 border-t border-white/5 flex flex-wrap justify-center gap-3 text-xs">
+          <span class="text-white/30">신규 프로젝트 의뢰이신가요?</span>
+          <button id="openContact" class="font-bold text-emerald-400 underline underline-offset-4">Contact →</button>
+        </div>
+        <a href="https://quickconnect.to/loind" target="_blank" rel="noopener"
+          class="mt-1 w-full py-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center justify-center gap-2 text-xs font-mono tracking-wider">
+          <i class="fa-solid fa-arrow-up-right-from-square text-emerald-400"></i> QUICKCONNECT.TO/LOIND
+        </a>
+        <p class="text-center text-[10px] text-white/20">등록된 LOIND WORKS 계정으로 로그인</p>
+      </div>
+
+      <div id="contactView" class="view flex-col gap-5">
+        <button id="backLogin" class="self-start text-[11px] text-white/40 hover:text-white border border-white/10 px-3 py-1.5 rounded-md bg-white/5">
+          <i class="fa-solid fa-arrow-left mr-1"></i> 로그인으로 돌아가기
+        </button>
+        <div><h2 class="text-2xl font-bold">Contact</h2><p class="text-xs text-white/40 mt-1">세부 내용을 기록해 주시면 <span class="text-emerald-400 font-semibold">전문 담당자</span>가 검토 후 연락드립니다.</p></div>
+        <form id="contactForm" class="space-y-5">
+          <h3 class="text-xs font-mono font-bold text-emerald-400 tracking-widest">1. 기업 및 클라이언트 정보</h3>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <label class="glass-input rounded-xl px-3 py-2"><input required class="w-full bg-transparent outline-none text-xs" placeholder="기업명"></label>
+            <label class="glass-input rounded-xl px-3 py-2"><input required class="w-full bg-transparent outline-none text-xs" placeholder="담당자 성함"></label>
+            <label class="glass-input rounded-xl px-3 py-2"><input class="w-full bg-transparent outline-none text-xs" placeholder="연락처"></label>
+            <label class="glass-input rounded-xl px-3 py-2"><input type="email" class="w-full bg-transparent outline-none text-xs" placeholder="이메일"></label>
+          </div>
+          <h3 class="text-xs font-mono font-bold text-emerald-400 tracking-widest">2. 프로젝트 정보</h3>
+          <div class="grid sm:grid-cols-2 gap-2" id="categoryGrid">
+            <button type="button" class="category glass-panel rounded-xl p-3 text-left text-xs hover:border-emerald-400/40" data-value="브랜딩 에이전시"><b>브랜딩 에이전시</b></button><button type="button" class="category glass-panel rounded-xl p-3 text-left text-xs hover:border-emerald-400/40" data-value="마케팅 에이전시"><b>마케팅 에이전시</b></button><button type="button" class="category glass-panel rounded-xl p-3 text-left text-xs hover:border-emerald-400/40" data-value="크리에이티브 에이전시"><b>크리에이티브 에이전시</b></button><button type="button" class="category glass-panel rounded-xl p-3 text-left text-xs hover:border-emerald-400/40" data-value="엔터테인먼트 에이전시"><b>엔터테인먼트 에이전시</b></button><button type="button" class="category glass-panel rounded-xl p-3 text-left text-xs hover:border-emerald-400/40" data-value="이벤트 / 프로덕션"><b>이벤트 / 프로덕션</b></button><button type="button" class="category glass-panel rounded-xl p-3 text-left text-xs hover:border-emerald-400/40" data-value="디지털 / 테크 에이전시"><b>디지털 / 테크 에이전시</b></button>
+          </div>
+          <textarea required class="glass-input rounded-xl w-full min-h-28 p-3 text-xs outline-none" placeholder="프로젝트 목적과 현재 고민을 적어주세요."></textarea>
+          <button class="w-full py-3 bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl">프로젝트 의뢰 접수하기</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+<script type="module" src="./assets/login.js"></script>
+</body></html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LOIND WORKS</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  *{box-sizing:border-box}
+  body{font-family:'DM Sans',sans-serif}
+  .logo-font{font-family:'Bebas Neue',sans-serif}
+  .glass-heavy{background:rgba(12,16,13,.56);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);border:1px solid rgba(255,255,255,.14)}
+  .glass-panel{background:rgba(255,255,255,.05);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.11)}
+  .glass-card{background:rgba(255,255,255,.04);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08);box-shadow:0 50px 100px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.1)}
+  .glass-input{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 2px 4px rgba(0,0,0,.15)}
+  .glass-input:focus-within{border-color:#34d399;box-shadow:0 0 0 3px rgba(52,211,153,.13)}
+  .view{display:none}.view.active{display:flex}
+  .nav-btn.active{color:#34d399;background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.25)}
+  .project-row.active{background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.3)}
+  .project-row:hover{background:rgba(255,255,255,.07)}
+  ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:99px}
+  @media(max-width:1024px){.brand-side{display:none}.login-side{width:100%!important}.work-shell{grid-template-columns:1fr!important}.detail-grid{grid-template-columns:1fr!important}.sidebar{display:flex;flex-direction:row;gap:12px;overflow-x:auto}.sidebar>p,.sidebar>div:last-child{display:none}.sidebar .space-y-2{display:flex;min-width:max-content}.side-filter{width:auto!important;min-width:120px}.work-shell{display:flex!important;flex-direction:column}.detail-grid{display:grid!important}.glass-heavy nav{overflow-x:auto}.glass-heavy nav>*{flex-shrink:0}}
+  @media(max-width:640px){header{height:auto!important;min-height:64px;align-items:flex-start!important;padding-top:12px!important;padding-bottom:12px!important;flex-direction:column!important}header nav{width:100%;margin-left:0!important}.detail-grid{display:block!important}#projectList{max-height:none!important;margin-bottom:16px}.project-row{align-items:flex-start!important}.project-row>span:last-child{display:none}.grid-cols-3{grid-template-columns:1fr!important}.comment-form{flex-direction:column}.comment-form button{min-height:40px}}
+</style>
+</head>
+<body class="m-0 text-white min-h-screen bg-slate-950 bg-cover bg-center bg-fixed"
+style="background-image:linear-gradient(rgba(3,8,6,.72),rgba(3,8,6,.84)),url('https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=2000&q=80')">
+<div class="min-h-screen flex flex-col">
+<header class="h-16 glass-heavy flex items-center px-5 lg:px-8 gap-6 sticky top-0 z-30">
+ <a href="./index.html" class="logo-font text-3xl tracking-[.12em]">LOIND <span class="text-emerald-400">WORKS</span></a>
+ <nav class="flex items-center gap-2 ml-auto">
+  <button class="nav-btn active border border-white/10 rounded-lg px-3 py-2 text-[10px] font-mono" data-view="projects">PROJECTS</button>
+  <button class="nav-btn border border-white/10 rounded-lg px-3 py-2 text-[10px] font-mono" data-view="activity">ACTIVITY</button>
+  <button class="nav-btn border border-white/10 rounded-lg px-3 py-2 text-[10px] font-mono" data-view="people">PEOPLE</button>
+  <a id="adminLink" href="./admin.html" class="hidden border border-emerald-400/25 text-emerald-300 rounded-lg px-3 py-2 text-[10px] font-mono items-center">ADMIN</a>
+  <a href="https://quickconnect.to/loind" target="_blank" rel="noopener" class="hidden md:flex border border-emerald-400/25 text-emerald-300 rounded-lg px-3 py-2 text-[10px] font-mono items-center gap-2">QUICK CONNECT ↗</a>
+  <button id="logout" class="w-9 h-9 rounded-lg border border-white/10 text-white/50"><i class="fa-solid fa-right-from-bracket"></i></button>
+ </nav>
+</header>
+
+<main class="work-shell flex-1 grid grid-cols-[260px_minmax(0,1fr)] gap-0">
+ <aside class="sidebar glass-heavy border-t-0 p-5 flex flex-col">
+  <p class="font-mono text-[9px] tracking-[.2em] text-white/25 mb-3">WORKSPACE</p>
+  <div class="space-y-2">
+   <button class="side-filter active w-full rounded-xl bg-emerald-400/10 border border-emerald-400/20 p-3 flex justify-between text-xs" data-filter="all"><span>전체 프로젝트</span><b id="countAll">0</b></button>
+   <button class="side-filter w-full rounded-xl border border-white/8 p-3 flex justify-between text-xs" data-filter="review"><span>확인 요청</span><b id="countReview">0</b></button>
+   <button class="side-filter w-full rounded-xl border border-white/8 p-3 flex justify-between text-xs" data-filter="progress"><span>진행 중</span><b id="countProgress">0</b></button>
+   <button class="side-filter w-full rounded-xl border border-white/8 p-3 flex justify-between text-xs" data-filter="done"><span>완료</span><b id="countDone">0</b></button>
+  </div>
+  <div class="mt-auto glass-panel rounded-xl p-4">
+   <p class="text-[10px] font-mono text-white/30">SIGNED IN</p><b id="signedUser" class="block mt-1 text-sm">INTERNAL USER</b>
+   <small class="text-[10px] text-emerald-300">LOIND CORPORATION</small>
+  </div>
+ </aside>
+
+ <section class="p-4 sm:p-7 lg:p-9 overflow-y-auto">
+  <div id="projectsView" class="workspace-view">
+   <div class="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-7">
+    <div><p class="font-mono text-[10px] tracking-[.2em] text-emerald-400">SIGNAL HUB / PROJECT CONTROL</p><h1 class="text-3xl font-bold mt-2">Project Workspace</h1><p class="text-xs text-white/35 mt-1">내부 담당자와 외부 담당자가 진행 상황과 피드백을 공유합니다.</p></div>
+    <label class="glass-input rounded-xl px-4 py-2.5 flex items-center gap-2 w-full md:w-72"><i class="fa-solid fa-magnifying-glass text-white/25 text-xs"></i><input id="search" class="bg-transparent outline-none text-xs w-full" placeholder="프로젝트 검색"></label>
+   </div>
+   <div class="detail-grid grid grid-cols-[minmax(320px,.82fr)_minmax(420px,1.18fr)] gap-5">
+    <div class="glass-panel rounded-2xl p-3 space-y-2 max-h-[calc(100vh-180px)] overflow-y-auto" id="projectList"><p class="p-4 text-xs text-white/35">프로젝트를 불러오는 중입니다.</p></div>
+    
+    <article id="projectDetail" class="glass-card rounded-2xl p-6 min-h-[620px]"></article>
+   </div>
+  </div>
+
+  <div id="activityView" class="workspace-view hidden">
+   <p class="font-mono text-[10px] tracking-[.2em] text-emerald-400">ACTIVITY LOG</p><h1 class="text-3xl font-bold mt-2 mb-7">최근 기록</h1>
+   <div class="glass-card rounded-2xl divide-y divide-white/5" id="activityList"></div>
+  </div>
+
+  <div id="peopleView" class="workspace-view hidden">
+   <p class="font-mono text-[10px] tracking-[.2em] text-emerald-400">PROJECT MEMBERS</p><h1 class="text-3xl font-bold mt-2 mb-7">참여자</h1>
+   <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4" id="peopleList"></div>
+  </div>
+ </section>
+</main></div>
+
+<script type="module" src="./assets/work.js"></script></body></html>
